@@ -3,7 +3,6 @@
 ;;; Michael Chen 2015
 
 ;;; Faces
-
 (defface evil-quickscope-first-face
   '((t (:inherit font-lock-constant-face :underline t)))
   "Face for first unique character.")
