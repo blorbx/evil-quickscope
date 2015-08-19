@@ -16,7 +16,7 @@ Place evil-quickscope.el in the =load-path= and add the following to ~/.emacs:
 The functionality is wrapped into two different minor modes. Only one can be
 activated at a time.
 
-*** =evil-quickscope-always-mode=
+*** evil-quickscope-always-mode
 evil-quickscope-always-mode provides targets at all times and directly
 emulates quick_scope.vim. It can be activated by adding the following to
 ~/.emacs:
@@ -32,7 +32,7 @@ adding 'turn-on-evil-quickscope-always-mode' to the mode hook. For example:
 (add-hook 'prog-mode-hook 'turn-on-evil-quickscope-always-mode)
 #+end_src
 
-*** =evil-quickscope-mode=
+*** evil-quickscope-mode
 evil-quickscope-mode provides targets only after one of the f,F,t,T keys are
 pressed. It can be activated by adding the following to ~/.emacs:
 
