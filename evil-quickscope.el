@@ -23,6 +23,9 @@
 (defvar evil-quickscope-word-separator " "
   "String which contains all word separating characters.")
 
+(defvar evil-quickscope-search-max nil
+  "Specifies maximum number of characters to search. nil to disable.")
+
 (defvar evil-quickscope-mode-map
   (let ((map (make-sparse-keymap)))
     (evil-define-key 'motion map "f" 'evil-quickscope-find-char)
@@ -91,10 +94,14 @@
         (seen-chars (evil-quickscope-create-char-plist
                      evil-quickscope-accepted-chars))
         (direction (if (> end start) 1 -1))
-        (pos start))
-    (while (/= pos end)
+        (pos start)
+        (num-searches 0))
+    (while (and (/= pos end)
+                (or (eq evil-quickscope-search-max nil)
+                    (< num-searches evil-quickscope-search-max)))
       (update-hl-chars pos)
-      (setq pos (+ pos direction)))
+      (setq pos (+ pos direction))
+      (setq num-searches (1+ num-searches)))
     (add-to-hl-chars)
     hl-chars))
 

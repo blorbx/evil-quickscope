@@ -137,6 +137,35 @@
                    '((13 0) (9 0) (5 0))))
     ))
 
+(ert-deftest evil-quickscope-get-highlighted-chars-search-max-test ()
+  "Test search-max parameter."
+  :tags '(evil-quickscope)
+
+  (with-temp-buffer
+    (insert "abc def ghi jkl mno pqr stu vwx yz")
+    (let (evil-quickscope-search-max)
+
+      ;; nil parameter shouldn't limit - (d,g,j,m,p,s,v,y)
+      (setq evil-quickscope-search-max nil)
+      (should (equal (evil-quickscope-get-highlighted-chars 1 (buffer-size))
+                     '((33 0) (29 0) (25 0) (21 0) (17 0) (13 0) (9 0) (5 0))))
+
+      ;; 10 should limit to (d,g)
+      (setq evil-quickscope-search-max 10)
+      (should (equal (evil-quickscope-get-highlighted-chars 1 (buffer-size))
+                     '((9 0) (5 0))))
+
+      ;; 21 should limit to (d,g,j,m,p)
+      (setq evil-quickscope-search-max 21)
+      (should (equal (evil-quickscope-get-highlighted-chars 1 (buffer-size))
+                     '((21 0) (17 0) (13 0) (9 0) (5 0))))
+
+      ;; 10 backwards should limit to (x,u)
+      (setq evil-quickscope-search-max 10)
+      (should (equal (evil-quickscope-get-highlighted-chars (buffer-size) 1)
+                     '((27 0) (31 0))))
+    )))
+
 ;;; Overlay tests
 (ert-deftest evil-quickscope-update-overlays-directional-test ()
   "Test overlay placement functions."
