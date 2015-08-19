@@ -3,6 +3,8 @@
 ;;; Use eval-buffer and then M-x ert to run
 ;;; Michael Chen 2015
 
+(load-file "evil-quickscope.el")
+
 ;;; Utility tests
 (ert-deftest evil-quickscope-create-char-plist-test ()
   "Test creation of character plist."
@@ -399,3 +401,5 @@
   (should (eq evil-quickscope-always-mode nil))
   (should (eq evil-quickscope-mode nil))
   )
+
+(provide 'evil-quickscope-tests)
