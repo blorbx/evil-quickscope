@@ -154,28 +154,47 @@
   "Calls function and undo overlays if cancelled out."
   (unwind-protect
       (call-interactively find-function)
-    (evil-quickscope-remove-overlays)))
+    (evil-quickscope-remove-overlays)
+    ))
 
-;;; Interactive functions
+;;; Replacement evil-find-char* commands
 (defun evil-quickscope-find-char ()
+  "Move to the next COUNT'th occurence of CHAR.
+Highlight first or second unique letter of each word."
   (interactive)
   (evil-quickscope-update-overlays t)
   (evil-quickscope-call-find 'evil-find-char))
 
 (defun evil-quickscope-find-char-backward ()
+  "Move to the previous COUNT'th occurence of CHAR.
+Highlight first or second unique letter of each word."
   (interactive)
   (evil-quickscope-update-overlays nil)
   (evil-quickscope-call-find 'evil-find-char-backward))
 
 (defun evil-quickscope-find-char-to ()
+  "Move before the next COUNT'th occurence of CHAR.
+Highlight first or second unique letter of each word."
   (interactive)
   (evil-quickscope-update-overlays t)
   (evil-quickscope-call-find 'evil-find-char-to))
 
 (defun evil-quickscope-find-char-to-backward ()
+  "Move before the previous COUNT'th occurence of CHAR.
+Highlight first or second unique letter of each word."
   (interactive)
   (evil-quickscope-update-overlays nil)
   (evil-quickscope-call-find 'evil-find-char-to-backward))
+
+;; Set evil properties of replacement commands
+(evil-set-command-properties 'evil-quickscope-find-char
+                             :type 'inclusive :jump t :keep-visual t)
+(evil-set-command-properties 'evil-quickscope-find-char-backward
+                             :type 'exclusive :jump t :keep-visual t)
+(evil-set-command-properties 'evil-quickscope-find-char-to
+                             :type 'inclusive :jump t :keep-visual t)
+(evil-set-command-properties 'evil-quickscope-find-char-to-backward
+                             :type 'exclusive :jump t :keep-visual t)
 
 ;;; Minor mode
 (define-minor-mode evil-quickscope-always-mode
@@ -191,13 +210,12 @@ movement commands. Target highglights always on."
   (remove-hook 'post-command-hook 'evil-quickscope-update-overlays-bidirectional t)
 
   (when evil-quickscope-always-mode
-    ; Turn off quickscope-mode if on
+    ;; Turn off quickscope-mode if on
     (when evil-quickscope-mode
-        (evil-quickscope-mode 0))
+      (evil-quickscope-mode 0))
 
-      (add-hook 'post-command-hook 'evil-quickscope-update-overlays-bidirectional nil t)))
+    (add-hook 'post-command-hook 'evil-quickscope-update-overlays-bidirectional nil t)))
 
-;;; TODO: bug where df/dt will be offset by one char
 (define-minor-mode evil-quickscope-mode
   "Quickscope mode for evil. Highlights per-word targets for f,F,t,T vim
 movement commands. Target highlights activate when f,F,t,T pressed."
@@ -211,8 +229,8 @@ movement commands. Target highlights activate when f,F,t,T pressed."
   (evil-normalize-keymaps)
 
   (when evil-quickscope-mode
-    ; Turn off quickscope-always-mode if on
+    ;; Turn off quickscope-always-mode if on
     (when evil-quickscope-always-mode
-        (evil-quickscope-always-mode 0))))
+      (evil-quickscope-always-mode 0))))
 
 (provide 'evil-quickscope)
