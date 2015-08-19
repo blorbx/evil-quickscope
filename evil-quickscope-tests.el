@@ -3,24 +3,9 @@
 ;;; Use eval-buffer and then M-x ert to run
 ;;; Michael Chen 2015
 
-;;; Misc Tests
-
-;; Overlay Function unit tests
-(defun test-set-face-at-point ()
-  (interactive)
-  (evil-quickscope-set-overlay 'evil-quickscope-first-face (point)))
-
-(defun test-remove-all-overlays ()
-  (interactive)
-  (evil-quickscope-remove-overlays))
-
-;; utility function tests
-(defun test-create-char-plist ()
-  (interactive)
-  (evil-quickscope-create-char-plist "aBcZ9"))
-
 ;;; Utility tests
 (ert-deftest evil-quickscope-create-char-plist-test ()
+  "Test creation of character plist."
   :tags '(evil-quickscope)
 
   ;; Empty
@@ -38,6 +23,7 @@
   )
 
 (ert-deftest evil-quickscope-increment-plist-char-test ()
+  "Test incrementing character plist."
   :tags '(evil-quickscope)
 
   (let ((plist (evil-quickscope-create-char-plist "abc")))
@@ -64,6 +50,7 @@
     ))
 
 (ert-deftest evil-quickscope-is-separator-p-test ()
+  "Test is-separator predicate function."
   :tags '(evil-quickscope)
   ;; Space
   (let ((evil-quickscope-word-separator " "))
@@ -96,6 +83,7 @@
 
 ;;; Character Finding Tests
 (ert-deftest evil-quickscope-get-highlighted-chars ()
+  "Test character finding function."
   :tags '(evil-quickscope)
   (with-temp-buffer
     ;; Empty buffer
@@ -149,6 +137,7 @@
 
 ;;; Overlay tests
 (ert-deftest evil-quickscope-update-overlays-directional-test ()
+  "Test overlay placement functions."
   :tags '(evil-quickscope)
 
   (defun my-filter (condp lst)
@@ -328,70 +317,10 @@
    "abc def ghi" 10 [?v ?T ?e]
    (evil-quickscope-should-str-pos-vis "abc def ghi" 7 7 11))
   )
-  ;; (with-temp-buffer
-  ;;   (switch-to-buffer (current-buffer))
-  ;;   (insert "abc def ghi")
-  ;;   (evil-local-mode 1)
-  ;;   (evil-quickscope-mode 1)
-
-  ;;   ;; "*abc def ghi" with "fe" should leave point at e:6
-  ;;   (goto-char 1)
-  ;;   (evil-force-normal-state)
-  ;;   (execute-kbd-macro [?d ?f ?e])
-  ;;   (should (equal (buffer-string) "f ghi"))
-  ;;   (should (equal (point) 1))
-  ;;   (should (equal evil-visual-overlay nil))
-  ;;   )
-
-  ;; (with-temp-buffer
-  ;;   (switch-to-buffer (current-buffer))
-  ;;   (insert "abc def ghi")
-  ;;   (evil-local-mode 1)
-  ;;   (evil-quickscope-mode 1)
-
-  ;;   ;; "*abc def ghi" with "te" should leave point at d:5
-  ;;   (goto-char 1)
-  ;;   (evil-force-normal-state)
-  ;;   (execute-kbd-macro [?t ?e])
-  ;;   (should (equal (buffer-string) "abc def ghi"))
-  ;;   (should (equal (point) 5))
-  ;;   (should (equal evil-visual-overlay nil))
-  ;;   )
-
-  ;; (with-temp-buffer
-  ;;   (switch-to-buffer (current-buffer))
-  ;;   (insert "abc def ghi")
-  ;;   (evil-local-mode 1)
-  ;;   (evil-quickscope-mode 1)
-
-  ;;   ;; "abc def g*hi" with "Fe" should leave point at e:6
-  ;;   (goto-char 10)
-  ;;   (evil-force-normal-state)
-  ;;   (execute-kbd-macro [?F ?e])
-  ;;   (should (equal (buffer-string) "abc def ghi"))
-  ;;   (should (equal (point) 6))
-  ;;   (should (equal evil-visual-overlay nil))
-  ;;   )
-
-  ;; (with-temp-buffer
-  ;;   (switch-to-buffer (current-buffer))
-  ;;   (insert "abc def ghi")
-  ;;   (evil-local-mode 1)
-  ;;   (evil-quickscope-mode 1)
-
-  ;;   ;; "abc def g*hi" with "Te" should leave point at f:7
-  ;;   (goto-char 10)
-  ;;   (evil-force-normal-state)
-  ;;   (execute-kbd-macro [?T ?e])
-  ;;   (should (equal (buffer-string) "abc def ghi"))
-  ;;   (should (equal (point) 7))
-  ;;   (should (equal evil-visual-overlay nil))
-  ;;   )
-
-  ;; )
 
 ;;; Minor-mode tests
 (ert-deftest evil-quickscope-minor-mode-on-test ()
+  "Test evil-quickscope-mode turning on."
   :tags '(evil-quickscope)
 
   ;; Turn off
@@ -416,6 +345,7 @@
   )
 
 (ert-deftest evil-quickscope-always-minor-mode-on-test ()
+  "Test evil-quickscope-always-mode turning on."
   :tags '(evil-quickscope)
 
   ;; Turn off
@@ -440,6 +370,7 @@
   )
 
 (ert-deftest evil-quickscope-minor-mode-exclusive-test ()
+  "Test interactions between qs-mode and qs-always-mode - should turn each other off."
   :tags '(evil-quickscope)
 
   ;; Both off
