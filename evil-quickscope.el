@@ -5,26 +5,43 @@
 ;;; Faces
 (defface evil-quickscope-first-face
   '((t (:inherit font-lock-constant-face :underline t)))
-  "Face for first unique character.")
+  "Face for first unique character."
+  :group 'evil-quickscope)
 
 (defface evil-quickscope-second-face
   '((t (:inherit font-lock-keyword-face :underline t)))
-  "Face for second unique character.")
+  "Face for second unique character."
+  :group 'evil-quickscope)
+
+;;; Settings
+(defcustom evil-quickscope-bidirectional nil
+  "Determines whether overlay only shows in
+  direction of F/T (nil) or both directions (t)."
+  :group 'evil-quickscope)
+
+(defcustom evil-quickscope-accepted-chars
+  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+  "String containing which characters are acceptable to highlight."
+  :group 'evil-quickscope)
+
+(defcustom evil-quickscope-word-separator " "
+  "String which contains all word separating characters."
+  :group 'evil-quickscope)
+
+(defcustom evil-quickscope-search-max 1000
+  "Specifies maximum number of characters to search. nil to disable."
+  :group 'evil-quickscope)
+
+(defcustom evil-quickscope-always-mode-delay 0.1
+  "Seconds to wait before displaying overlays in always-mode.
+Usually should be longer than the keyboard repeat rate to prevent excessive
+updating when holding a key to scroll. Set to 0 to disable."
+  :group 'evil-quickscope)
 
 ;;; Variables
-(defvar evil-quickscope-bidirectional nil
-  "Determines whether overlay only shows in
-  direction of F/T (nil) or both directions (t).")
-
-(defvar evil-quickscope-accepted-chars
-  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-  "String containing which characters are acceptable to highlight.")
-
-(defvar evil-quickscope-word-separator " "
-  "String which contains all word separating characters.")
-
-(defvar evil-quickscope-search-max nil
-  "Specifies maximum number of characters to search. nil to disable.")
+(defvar evil-quickscope-always-mode-timer nil
+  "Timer for delaying always-mode.")
+(make-variable-buffer-local 'evil-quickscope-always-mode-timer)
 
 (defvar evil-quickscope-mode-map
   (let ((map (make-sparse-keymap)))
@@ -161,8 +178,15 @@
   "Calls function and undo overlays if cancelled out."
   (unwind-protect
       (call-interactively find-function)
-    (evil-quickscope-remove-overlays)
-    ))
+    (evil-quickscope-remove-overlays)))
+
+(defun evil-quickscope-update-overlays-bidirectional-delayed ()
+  "Update overlays bidirectionally with a delay."
+  (when evil-quickscope-always-mode-timer
+    (cancel-timer evil-quickscope-always-mode-timer))
+  (setq evil-quickscope-always-mode-timer
+        (run-at-time evil-quickscope-always-mode-delay nil
+                     #'evil-quickscope-update-overlays-bidirectional)))
 
 ;;; Replacement evil-find-char* commands
 ;;;###autoload
@@ -219,14 +243,14 @@ movement commands. Target highglights always on."
   :group 'evil-quickscope
 
   (evil-quickscope-remove-overlays)
-  (remove-hook 'post-command-hook 'evil-quickscope-update-overlays-bidirectional t)
+  (remove-hook 'post-command-hook 'evil-quickscope-update-overlays-bidirectional-delayed t)
 
   (when evil-quickscope-always-mode
     ;; Turn off quickscope-mode if on
     (when evil-quickscope-mode
       (evil-quickscope-mode 0))
 
-    (add-hook 'post-command-hook 'evil-quickscope-update-overlays-bidirectional nil t)))
+    (add-hook 'post-command-hook 'evil-quickscope-update-overlays-bidirectional-delayed nil t)))
 
 ;;;###autoload
 (defun turn-on-evil-quickscope-always-mode ()
