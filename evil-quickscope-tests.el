@@ -229,6 +229,175 @@
     )
   )
 
+;;; find-char replacement command tests
+(defun evil-quickscope-test-get-line ()
+  "Get current line as string."
+  (let ((start (line-beginning-position))
+        (end (line-end-position)))
+    (buffer-substring-no-properties start end)))
+
+(defmacro evil-quickscope-test-macro (string pos kbd-macro &rest body)
+  "Runs keyboard macro on STRING starting at POS. BODY argument used for (should) testing."
+  `(with-temp-buffer
+      (switch-to-buffer (current-buffer))
+      (insert ,string)
+      (evil-local-mode 1)
+      (evil-quickscope-mode 1)
+
+      (goto-char ,pos)
+      (evil-force-normal-state)
+      (execute-kbd-macro ,kbd-macro)
+      ,@body))
+
+(defmacro evil-quickscope-should-str-pos-vis (str pos vis-start &optional vis-end)
+  "Macro which runs (should) for buffer STRing, ending POSition, and VISual overlay start and end (or nil)."
+  `(progn
+     (should (equal (buffer-string) ,str))
+     (should (equal (point) ,pos))
+     (if (equal ,vis-start nil) (should (equal evil-visual-overlay nil))
+       (should (equal ,vis-start (overlay-start evil-visual-overlay)))
+       (when ,vis-end
+         (should (equal ,vis-end (overlay-end evil-visual-overlay)))))
+     ))
+
+(ert-deftest evil-quickscope-find-char-normal-test ()
+  "Test find-char* commands from normal mode."
+  :tags '(evil-quickscope)
+
+  (with-temp-buffer
+    (switch-to-buffer (current-buffer))
+    (insert "abc def ghi")
+    (evil-local-mode 1)
+    (evil-quickscope-mode 1)
+
+    ;; "*abc def ghi" with "fe" should leave point at e:6
+    (goto-char 1)
+    (evil-force-normal-state)
+    (execute-kbd-macro [?f ?e])
+    (should (equal (buffer-string) "abc def ghi"))
+    (should (equal (point) 6))
+    (should (equal evil-visual-overlay nil))
+
+    ;; "*abc def ghi" with "te" should leave point at d:5
+    (goto-char 1)
+    (evil-force-normal-state)
+    (execute-kbd-macro [?t ?e])
+    (should (equal (buffer-string) "abc def ghi"))
+    (should (equal (point) 5))
+    (should (equal evil-visual-overlay nil))
+
+    ;; "abc def g*hi" with "Fe" should leave point at e:6
+    (goto-char 10)
+    (evil-force-normal-state)
+    (execute-kbd-macro [?F ?e])
+    (should (equal (buffer-string) "abc def ghi"))
+    (should (equal (point) 6))
+    (should (equal evil-visual-overlay nil))
+
+    ;; "abc def g*hi" with "Te" should leave point at f:7
+    (goto-char 10)
+    (evil-force-normal-state)
+    (execute-kbd-macro [?T ?e])
+    (should (equal (buffer-string) "abc def ghi"))
+    (should (equal (point) 7))
+    (should (equal evil-visual-overlay nil))
+    )
+
+  ;; (evil-quickscope-test-macro "abc def ghi" 10 [?T ?e]
+  ;;                             (should (equal (buffer-string) "abc def ghi"))
+  ;;                             (should (equal (point) 7))
+  ;;                             (should (equal evil-visual-overlay nil)))
+
+  ;; (evil-quickscope-test-macro
+  ;;  "abc def ghi" 10 [?T ?e]
+  ;;  (evil-quickscope-should-str-pos-vis "abc def ghi" 7 nil))
+
+  )
+
+(ert-deftest evil-quickscope-find-char-delete-test ()
+  "Test find-char* commands from as motion for evil-delete command ."
+  :tags '(evil-quickscope)
+
+  (with-temp-buffer
+    (switch-to-buffer (current-buffer))
+    (insert "abc def ghi")
+    (evil-local-mode 1)
+    (evil-quickscope-mode 1)
+
+    ;; "*abc def ghi" with "fe" should leave point at e:6
+    (goto-char 1)
+    (evil-force-normal-state)
+    (execute-kbd-macro [?d ?f ?e])
+    (should (equal (buffer-string) "f ghi"))
+    (should (equal (point) 1))
+    (should (equal evil-visual-overlay nil))
+    )
+
+  (with-temp-buffer
+    (switch-to-buffer (current-buffer))
+    (insert "abc def ghi")
+    (evil-local-mode 1)
+    (evil-quickscope-mode 1)
+
+    ;; "*abc def ghi" with "te" should leave point at d:5
+    (goto-char 1)
+    (evil-force-normal-state)
+    (execute-kbd-macro [?t ?e])
+    (should (equal (buffer-string) "abc def ghi"))
+    (should (equal (point) 5))
+    (should (equal evil-visual-overlay nil))
+    )
+
+  (with-temp-buffer
+    (switch-to-buffer (current-buffer))
+    (insert "abc def ghi")
+    (evil-local-mode 1)
+    (evil-quickscope-mode 1)
+
+    ;; "abc def g*hi" with "Fe" should leave point at e:6
+    (goto-char 10)
+    (evil-force-normal-state)
+    (execute-kbd-macro [?F ?e])
+    (should (equal (buffer-string) "abc def ghi"))
+    (should (equal (point) 6))
+    (should (equal evil-visual-overlay nil))
+    )
+
+  (with-temp-buffer
+    (switch-to-buffer (current-buffer))
+    (insert "abc def ghi")
+    (evil-local-mode 1)
+    (evil-quickscope-mode 1)
+
+    ;; "abc def g*hi" with "Te" should leave point at f:7
+    (goto-char 10)
+    (evil-force-normal-state)
+    (execute-kbd-macro [?T ?e])
+    (should (equal (buffer-string) "abc def ghi"))
+    (should (equal (point) 7))
+    (should (equal evil-visual-overlay nil))
+    )
+
+  )
+
+(defun test-thingy ()
+ (with-temp-buffer
+    (insert "abc def ghi")
+    (evil-local-mode 1)
+    ;; (evil-quickscope-mode 1)
+
+    ;; "*abc def ghi" with "fe" should leave point at e:6
+    (goto-char 1)
+    (execute-kbd-macro [?f ?e])
+    ;; (setq last-kbd-macro [?f ?e])
+    ;; (evil-force-normal-state)
+    ;; (call-last-kbd-macro)
+    ;; (should (eql (point) 6))
+
+    ;(debug nil (buffer-string) (point) last-kbd-macro evil-state)
+    )
+ )
+
 ;;; Minor-mode tests
 (ert-deftest evil-quickscope-minor-mode-on-test ()
   :tags '(evil-quickscope)
