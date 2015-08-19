@@ -28,7 +28,8 @@
 
 ;;; Commentary:
 
-;; This package emulates quick_scope.vim by Brian Le. It highlights targets for
+;; This package emulates quick_scope.vim by Brian Le
+;; (https://github.com/unblevable/quick-scope). It highlights targets for
 ;; evil-mode's f,F,t,T keys, allowing for quick navigation within a line with no
 ;; additional mappings.
 ;;

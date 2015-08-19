@@ -1,0 +1,58 @@
+* evil-quickscope (v0.1)
+This package emulates [[https://github.com/unblevable/quick-scope][quick_scope.vim by Brian Le]]. It highlights targets for
+evil-mode's f,F,t,T keys, allowing for quick navigation within a line with no
+additional mappings.
+
+This program requires EVIL (http://bitbucket.org/lyro/evil/wiki/Home)
+
+* Install
+Place evil-quickscope.el in the =load-path= and add the following to ~/.emacs:
+
+#+begin_src elisp
+(require 'evil-quickscope)
+#+end_src
+
+* Usage
+The functionality is wrapped into two different minor modes. Only one can be
+activated at a time.
+
+** =evil-quickscope-always-mode=
+evil-quickscope-always-mode provides targets at all times and directly
+emulates quick_scope.vim. It can be activated by adding the following to
+~/.emacs:
+
+#+begin_src elisp
+(global-evil-quickscope-always-mode 1)
+#+end_src
+
+Alternatively, you can enable evil-quickscope-always-mode in certain modes by
+adding 'turn-on-evil-quickscope-always-mode' to the mode hook. For example:
+
+#+begin_src elisp
+(add-hook 'prog-mode-hook 'turn-on-evil-quickscope-always-mode)
+#+end_src
+
+** =evil-quickscope-mode=
+evil-quickscope-mode provides targets only after one of the f,F,t,T keys are
+pressed. It can be activated by adding the following to ~/.emacs:
+
+#+begin_src elisp
+(global-evil-quickscope-mode 1)
+#+end_src
+
+Or, you can use 'turn-on-evil-quickscope-mode' as a mode hook:
+
+#+begin_src elisp
+(add-hook 'prog-mode-hook 'turn-on-evil-quickscope-mode)
+#+end_src
+
+* Customization
+** Faces
+The faces evil-quickscope uses to highlight targets are defined in
+=evil-quickscope-first-face= and =evil-quickscope-second-face=.
+
+** Bidirectional
+By default, evil-quickscope-mode only shows targets in the direction of the
+f,F,t,T command. This behavior can be changed to show targets in both directions
+by using =setq= or =M-x customize evil-quickscope= to set
+=evil-quickscope-bidirectional= to =t=.
