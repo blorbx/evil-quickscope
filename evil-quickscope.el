@@ -1,6 +1,65 @@
-;;; evil-quickscope.el
-;;; Highlights first unique character in each word for easy navigation with f,F,t,T
-;;; Michael Chen 2015
+;;; evil-quickscope.el --- Highlight unique characters in words for f,F,t,T navigation
+
+;; Copyright (C) 2015 Michael Chen
+
+;; Author: Michael Chen <blorbx@gmail.com>
+;; Maintainer: Michael Chen <blorbx@gmail.com>
+;; Created: 12 Aug 2015
+;; Version: 0.1
+
+;; Homepage: http://github.com/blorbx/evil-quickscope
+;; Keywords: faces, emulation, vim, evil
+;; Package-Requires: ((evil "0"))
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; This package emulates quick_scope.vim by Brian Le. It highlights targets for
+;; evil-mode's f,F,t,T keys, allowing for quick navigation within a line with no
+;; additional mappings.
+;;
+;; The functionality is wrapped into two different minor modes. Only one can be
+;; activated at a time.
+
+;; evil-quickscope-always-mode provides targets at all times and directly
+;; emulates quick_scope.vim. It can be activated by adding the following to
+;; ~/.emacs:
+;;
+;;     (require 'evil-quickscope)
+;;     (global-evil-quickscope-always-mode 1)
+;;
+;; Alternatively, you can enable evil-quickscope-always-mode in certain modes by
+;; adding 'turn-on-evil-quickscope-always-mode' to the mode hook. For example:
+;;
+;;     (add-hook 'prog-mode-hook 'turn-on-evil-quickscope-always-mode)
+;;
+;; evil-quickscope-mode provides targets only after one of the f,F,t,T keys are
+;; pressed. It can be activated by adding the following to ~/.emacs:
+;;
+;;     (require 'evil-quickscope)
+;;     (global-evil-quickscope-mode 1)
+;;
+;; Or, you can use 'turn-on-evil-quickscope-mode' as a mode hook:
+;;
+;;     (add-hook 'prog-mode-hook 'turn-on-evil-quickscope-mode)
+;;
+;; This program requires EVIL (http://bitbucket.org/lyro/evil/wiki/Home)
+
+;;; Code:
 
 ;;; Faces
 (defface evil-quickscope-first-face
@@ -38,7 +97,7 @@ Usually should be longer than the keyboard repeat rate to prevent excessive
 updating when holding a key to scroll. Set to 0 to disable."
   :group 'evil-quickscope)
 
-;;; Variables
+;;; Internal variables
 (defvar evil-quickscope-always-mode-timer nil
   "Timer for delaying always-mode.")
 (make-variable-buffer-local 'evil-quickscope-always-mode-timer)
@@ -253,6 +312,11 @@ movement commands. Target highglights always on."
     (add-hook 'post-command-hook 'evil-quickscope-update-overlays-bidirectional-delayed nil t)))
 
 ;;;###autoload
+(define-globalized-minor-mode global-evil-quickscope-always-mode
+  evil-quickscope-always-mode turn-on-evil-quickscope-always-mode
+  "Global minor mode for evil-quickscope-always-mode.")
+
+;;;###autoload
 (defun turn-on-evil-quickscope-always-mode ()
   "Enable evil-quickscope-mode"
   (evil-quickscope-always-mode 1))
@@ -281,6 +345,11 @@ movement commands. Target highlights activate when f,F,t,T pressed."
       (evil-quickscope-always-mode 0))))
 
 ;;;###autoload
+(define-globalized-minor-mode global-evil-quickscope-mode
+  evil-quickscope-mode turn-on-evil-quickscope-mode
+  "Global minor mode for evil-quickscope-mode.")
+
+;;;###autoload
 (defun turn-on-evil-quickscope-mode ()
   "Enable evil-quickscope-mode"
   (evil-quickscope-mode 1))
@@ -291,3 +360,5 @@ movement commands. Target highlights activate when f,F,t,T pressed."
   (evil-quickscope-mode 0))
 
 (provide 'evil-quickscope)
+
+;;; evil-quickscope.el ends here
