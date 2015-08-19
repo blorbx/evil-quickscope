@@ -158,6 +158,7 @@
     ))
 
 ;;; Replacement evil-find-char* commands
+;;;###autoload
 (defun evil-quickscope-find-char ()
   "Move to the next COUNT'th occurence of CHAR.
 Highlight first or second unique letter of each word."
@@ -165,6 +166,7 @@ Highlight first or second unique letter of each word."
   (evil-quickscope-update-overlays t)
   (evil-quickscope-call-find 'evil-find-char))
 
+;;;###autoload
 (defun evil-quickscope-find-char-backward ()
   "Move to the previous COUNT'th occurence of CHAR.
 Highlight first or second unique letter of each word."
@@ -172,6 +174,7 @@ Highlight first or second unique letter of each word."
   (evil-quickscope-update-overlays nil)
   (evil-quickscope-call-find 'evil-find-char-backward))
 
+;;;###autoload
 (defun evil-quickscope-find-char-to ()
   "Move before the next COUNT'th occurence of CHAR.
 Highlight first or second unique letter of each word."
@@ -179,6 +182,7 @@ Highlight first or second unique letter of each word."
   (evil-quickscope-update-overlays t)
   (evil-quickscope-call-find 'evil-find-char-to))
 
+;;;###autoload
 (defun evil-quickscope-find-char-to-backward ()
   "Move before the previous COUNT'th occurence of CHAR.
 Highlight first or second unique letter of each word."
@@ -196,7 +200,8 @@ Highlight first or second unique letter of each word."
 (evil-set-command-properties 'evil-quickscope-find-char-to-backward
                              :type 'exclusive :jump t :keep-visual t)
 
-;;; Minor mode
+;;; Minor modes
+;;;###autoload
 (define-minor-mode evil-quickscope-always-mode
   "Quickscope mode for evil. Highlights per-word targets for f,F,t,T vim
 movement commands. Target highglights always on."
@@ -216,6 +221,17 @@ movement commands. Target highglights always on."
 
     (add-hook 'post-command-hook 'evil-quickscope-update-overlays-bidirectional nil t)))
 
+;;;###autoload
+(defun turn-on-evil-quickscope-always-mode ()
+  "Enable evil-quickscope-mode"
+  (evil-quickscope-always-mode 1))
+
+;;;###autoload
+(defun turn-off-evil-quickscope-always-mode ()
+  "Disable evil-quickscope-mode"
+  (evil-quickscope-always-mode 0))
+
+;;;###autoload
 (define-minor-mode evil-quickscope-mode
   "Quickscope mode for evil. Highlights per-word targets for f,F,t,T vim
 movement commands. Target highlights activate when f,F,t,T pressed."
@@ -232,5 +248,15 @@ movement commands. Target highlights activate when f,F,t,T pressed."
     ;; Turn off quickscope-always-mode if on
     (when evil-quickscope-always-mode
       (evil-quickscope-always-mode 0))))
+
+;;;###autoload
+(defun turn-on-evil-quickscope-mode ()
+  "Enable evil-quickscope-mode"
+  (evil-quickscope-mode 1))
+
+;;;###autoload
+(defun turn-off-evil-quickscope-mode ()
+  "Disable evil-quickscope-mode"
+  (evil-quickscope-mode 0))
 
 (provide 'evil-quickscope)
