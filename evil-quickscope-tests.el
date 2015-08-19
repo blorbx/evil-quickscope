@@ -1,8 +1,34 @@
-;;; evil-quickscope-tests.el
-;;; Unit tests for evil-quickscope.el
-;;; Use eval-buffer and then M-x ert to run
-;;; Michael Chen 2015
+;;; evil-quickscope-tests.el --- evil-quickscope test suite
 
+;; Copyright (C) 2015 Michael Chen
+
+;; Author: Michael Chen <blorbx@gmail.com>
+;; Maintainer: Michael Chen <blorbx@gmail.com>
+;; Created: 12 Aug 2015
+
+;; Homepage: http://github.com/blorbx/evil-quickscope
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+;;
+;; evil-quickscope test suite. use M-x eval-buffer then M-x ert to run.
+
+
+;;; Code:
 (load-file "evil-quickscope.el")
 
 ;;; Utility tests
@@ -432,3 +458,5 @@
   )
 
 (provide 'evil-quickscope-tests)
+
+;;; evil-quickscope-tests.el ends here
