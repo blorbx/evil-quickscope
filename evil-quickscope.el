@@ -75,8 +75,7 @@
 
 ;;; Settings
 (defcustom evil-quickscope-bidirectional nil
-  "Determines whether overlay only shows in
-  direction of F/T (nil) or both directions (t)."
+  "Determines whether overlay only shows in direction of F/T (nil) or both directions (t)."
   :group 'evil-quickscope)
 
 (defcustom evil-quickscope-accepted-chars
@@ -110,7 +109,7 @@ updating when holding a key to scroll. Set to 0 to disable."
     (evil-define-key 'motion map "t" 'evil-quickscope-find-char-to)
     (evil-define-key 'motion map "T" 'evil-quickscope-find-char-to-backward)
     map)
-  "Keymap for evil-quickscope-mode.")
+  "Keymap for `evil-quickscope-mode'.")
 
 ;;; Utility functions
 (defun evil-quickscope-create-char-plist (chars)
@@ -184,19 +183,19 @@ updating when holding a key to scroll. Set to 0 to disable."
 
 ;;; Overlays
 (defun evil-quickscope-apply-overlays-forward ()
-  "Gets highlighted characters and applies overlays forward."
+  "Gets highlighted characters and apply overlays forward."
   (let ((hl-positions (evil-quickscope-get-highlighted-chars
                        (1+ (point)) (line-end-position))))
     (evil-quickscope-apply-overlays hl-positions)))
 
 (defun evil-quickscope-apply-overlays-backward ()
-  "Gets highlighted characters and applies overlays backward."
+  "Gets highlighted characters and apply overlays backward."
   (let ((hl-positions (evil-quickscope-get-highlighted-chars
                        (1- (point)) (line-beginning-position))))
     (evil-quickscope-apply-overlays hl-positions)))
 
 (defun evil-quickscope-apply-overlays (hl-positions)
-  "Applies quickscope overlays at specified positions"
+  "Applies quickscope overlays at specified positions."
   (dolist (hl-pair hl-positions)
     (cond
      ((> (car hl-pair) 0) ; First occurence of letter
@@ -209,7 +208,7 @@ updating when holding a key to scroll. Set to 0 to disable."
   (overlay-put (make-overlay pos (1+ pos)) 'face face))
 
 (defun evil-quickscope-remove-overlays ()
-  "Removes all quickscope overlays from buffer."
+  "Remove all quickscope overlays from buffer."
     (dolist (face '(evil-quickscope-first-face
                     evil-quickscope-second-face))
       (remove-overlays nil nil 'face face)))
@@ -319,12 +318,12 @@ movement commands. Target highglights always on."
 
 ;;;###autoload
 (defun turn-on-evil-quickscope-always-mode ()
-  "Enable evil-quickscope-mode"
+  "Enable `evil-quickscope-mode'."
   (evil-quickscope-always-mode 1))
 
 ;;;###autoload
 (defun turn-off-evil-quickscope-always-mode ()
-  "Disable evil-quickscope-mode"
+  "Disable `evil-quickscope-mode'."
   (evil-quickscope-always-mode 0))
 
 ;;;###autoload
@@ -352,12 +351,12 @@ movement commands. Target highlights activate when f,F,t,T pressed."
 
 ;;;###autoload
 (defun turn-on-evil-quickscope-mode ()
-  "Enable evil-quickscope-mode"
+  "Enable `evil-quickscope-mode'."
   (evil-quickscope-mode 1))
 
 ;;;###autoload
 (defun turn-off-evil-quickscope-mode ()
-  "Disable evil-quickscope-mode"
+  "Disable `evil-quickscope-mode'."
   (evil-quickscope-mode 0))
 
 (provide 'evil-quickscope)
