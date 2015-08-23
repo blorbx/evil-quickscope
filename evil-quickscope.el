@@ -5,7 +5,7 @@
 ;; Author: Michael Chen <blorbx@gmail.com>
 ;; Maintainer: Michael Chen <blorbx@gmail.com>
 ;; Created: 12 Aug 2015
-;; Version: 0.1
+;; Version: 0.1.1
 
 ;; Homepage: http://github.com/blorbx/evil-quickscope
 ;; Keywords: faces, emulation, vim, evil
@@ -115,7 +115,7 @@ updating when holding a key to scroll. Set to 0 to disable."
 (defun evil-quickscope-create-char-plist (chars)
   "Creates initialized plist with accepted characters."
   (let ((plist ()))
-    (mapcar (lambda (c) (setq plist (plist-put plist c 0))) chars)
+    (mapc (lambda (c) (setq plist (plist-put plist c 0))) chars)
     plist))
 
 (defun evil-quickscope-increment-plist-char (char-plist char)
@@ -319,10 +319,12 @@ movement commands. Target highglights always on."
 ;;;###autoload
 (defun turn-on-evil-quickscope-always-mode ()
   "Enable `evil-quickscope-mode'."
+  (interactive)
   (evil-quickscope-always-mode 1))
 
 ;;;###autoload
 (defun turn-off-evil-quickscope-always-mode ()
+  (interactive)
   "Disable `evil-quickscope-mode'."
   (evil-quickscope-always-mode 0))
 
@@ -352,11 +354,13 @@ movement commands. Target highlights activate when f,F,t,T pressed."
 ;;;###autoload
 (defun turn-on-evil-quickscope-mode ()
   "Enable `evil-quickscope-mode'."
+  (interactive)
   (evil-quickscope-mode 1))
 
 ;;;###autoload
 (defun turn-off-evil-quickscope-mode ()
   "Disable `evil-quickscope-mode'."
+  (interactive)
   (evil-quickscope-mode 0))
 
 (provide 'evil-quickscope)
