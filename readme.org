@@ -1,4 +1,4 @@
-* evil-quickscope (v0.1)
+* evil-quickscope (v0.1.2)
 This package emulates [[https://github.com/unblevable/quick-scope][quick_scope.vim by Brian Le]]. It highlights targets for
 evil-mode's f,F,t,T keys, allowing for quick navigation within a line with no
 additional mappings.
@@ -56,3 +56,8 @@ By default, evil-quickscope-mode only shows targets in the direction of the
 f,F,t,T command. This behavior can be changed to show targets in both directions
 by using =setq= or =M-x customize evil-quickscope= to set
 =evil-quickscope-bidirectional= to =t=.
+
+*** Cross Lines
+The parameter =evil-quickscope-cross-lines= controls whether targets on
+different lines are highlighted. Should be used in conjunction with the
+parameter =evil-cross-lines=.

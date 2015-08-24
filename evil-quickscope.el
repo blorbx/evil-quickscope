@@ -5,7 +5,7 @@
 ;; Author: Michael Chen <blorbx@gmail.com>
 ;; Maintainer: Michael Chen <blorbx@gmail.com>
 ;; Created: 12 Aug 2015
-;; Version: 0.1.1
+;; Version: 0.1.2
 
 ;; Homepage: http://github.com/blorbx/evil-quickscope
 ;; Keywords: faces, emulation, vim, evil
@@ -62,6 +62,10 @@
 
 ;;; Code:
 
+(defgroup evil-quickscope nil
+  "Target highlighting for evil-mode's f,F,t,T keys."
+  :group 'evil)
+
 ;;; Faces
 (defface evil-quickscope-first-face
   '((t (:inherit font-lock-constant-face :underline t)))
@@ -76,6 +80,11 @@
 ;;; Settings
 (defcustom evil-quickscope-bidirectional nil
   "Determines whether overlay only shows in direction of F/T (nil) or both directions (t)."
+  :group 'evil-quickscope)
+
+(defcustom evil-quickscope-cross-lines nil
+  "Whether to cross lines for targets.
+Use in conjunction with the evil-cross-lines variable."
   :group 'evil-quickscope)
 
 (defcustom evil-quickscope-accepted-chars
@@ -184,14 +193,18 @@ updating when holding a key to scroll. Set to 0 to disable."
 ;;; Overlays
 (defun evil-quickscope-apply-overlays-forward ()
   "Gets highlighted characters and apply overlays forward."
-  (let ((hl-positions (evil-quickscope-get-highlighted-chars
-                       (1+ (point)) (line-end-position))))
+  (let* ((search-end (if evil-quickscope-cross-lines
+                  (point-max) (line-end-position)))
+         (hl-positions (evil-quickscope-get-highlighted-chars
+                       (1+ (point)) search-end)))
     (evil-quickscope-apply-overlays hl-positions)))
 
 (defun evil-quickscope-apply-overlays-backward ()
   "Gets highlighted characters and apply overlays backward."
-  (let ((hl-positions (evil-quickscope-get-highlighted-chars
-                       (1- (point)) (line-beginning-position))))
+  (let* ((search-end (if evil-quickscope-cross-lines
+                        (point-min) (line-beginning-position)))
+        (hl-positions (evil-quickscope-get-highlighted-chars
+                       (1- (point)) search-end)))
     (evil-quickscope-apply-overlays hl-positions)))
 
 (defun evil-quickscope-apply-overlays (hl-positions)

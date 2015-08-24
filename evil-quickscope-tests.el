@@ -273,6 +273,66 @@
     (evil-quickscope-update-overlays-directional nil)
     (should (equal (get-first-face-overlay-positions) '(7 3)))
     )
+
+  ;; evil-quickscope-cross-lines tests
+  (with-temp-buffer
+    (insert "abc def\nghi jkl\nmno pqr")
+
+    ;; evil-quickscope-cross-lines nil
+    (let ((evil-quickscope-cross-lines nil))
+      ;; "*abc def\nghi jkl\nmno pqr" with cross-lines nil, d:5, none backward
+      (goto-char 1)
+      (evil-quickscope-update-overlays-directional t)
+      (should (equal (get-first-face-overlay-positions) '(5)))
+
+      (evil-quickscope-update-overlays-directional nil)
+      (should (equal (get-first-face-overlay-positions) '()))
+
+      ;; "abc def\n*ghi jkl\nmno pqr" with cross-lines nil, j:12, none backward
+      (goto-char 9)
+      (evil-quickscope-update-overlays-directional t)
+      (should (equal (get-first-face-overlay-positions) '(13)))
+
+      (evil-quickscope-update-overlays-directional nil)
+      (should (equal (get-first-face-overlay-positions) '()))
+
+      ;; "abc def\nghi jkl\nmno *pqr" with cross-lines nil, none forward, o:19 back
+      (goto-char 21)
+      (evil-quickscope-update-overlays-directional t)
+      (should (equal (get-first-face-overlay-positions) '()))
+
+      (evil-quickscope-update-overlays-directional nil)
+      (should (equal (get-first-face-overlay-positions) '(19))))
+
+    ;; evil-quickscope-cross-lines
+    (let ((evil-quickscope-cross-lines t))
+      ;; "*abc def\nghi jkl\nmno pqr" with cross-lines t,
+      ;; d:5, g:9, j:13, m:17, p:21 forward, none back
+      (goto-char 1)
+      (evil-quickscope-update-overlays-directional t)
+      (should (equal (get-first-face-overlay-positions) '(21 17 13 9 5)))
+
+      (evil-quickscope-update-overlays-directional nil)
+      (should (equal (get-first-face-overlay-positions) '()))
+
+      ;; "abc def\n*ghi jkl\nmno pqr" with cross-lines t,
+      ;; j:13, m:17, p:21 forward, f:7, c:3 back
+      (goto-char 9)
+      (evil-quickscope-update-overlays-directional t)
+      (should (equal (get-first-face-overlay-positions) '(21 17 13)))
+
+      (evil-quickscope-update-overlays-directional nil)
+      (should (equal (get-first-face-overlay-positions) '(7 3)))
+
+      ;; "abc def\nghi jkl\nmno *pqr" with cross-lines t,
+      ;; none forward, o:19, l:15, i:11, f:7, c:3 back
+      (goto-char 21)
+      (evil-quickscope-update-overlays-directional t)
+      (should (equal (get-first-face-overlay-positions) '()))
+
+      (evil-quickscope-update-overlays-directional nil)
+      (should (equal (get-first-face-overlay-positions) '(19 15 11 7 3)))
+      ))
   )
 
 ;;; find-char replacement command tests
