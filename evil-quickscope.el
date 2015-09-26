@@ -62,6 +62,8 @@
 
 ;;; Code:
 
+(require 'evil)
+
 (defgroup evil-quickscope nil
   "Target highlighting for evil-mode's f,F,t,T keys."
   :group 'evil)
