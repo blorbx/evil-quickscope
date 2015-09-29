@@ -297,13 +297,13 @@ Highlight first or second unique letter of each word."
 
 ;; Set evil properties of replacement commands
 (evil-set-command-properties 'evil-quickscope-find-char
-                             :type 'inclusive :jump t :keep-visual t)
+                             :type 'inclusive :jump t :keep-visual t :repeat 'motion)
 (evil-set-command-properties 'evil-quickscope-find-char-backward
-                             :type 'exclusive :jump t :keep-visual t)
+                             :type 'exclusive :jump t :keep-visual t :repeat 'motion)
 (evil-set-command-properties 'evil-quickscope-find-char-to
-                             :type 'inclusive :jump t :keep-visual t)
+                             :type 'inclusive :jump t :keep-visual t :repeat 'motion)
 (evil-set-command-properties 'evil-quickscope-find-char-to-backward
-                             :type 'exclusive :jump t :keep-visual t)
+                             :type 'exclusive :jump t :keep-visual t :repeat 'motion)
 
 ;;; Minor modes
 ;;;###autoload

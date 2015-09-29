@@ -435,6 +435,32 @@
    (evil-quickscope-should-str-pos-vis "abc def ghi" 7 7 11))
   )
 
+;;; find-char evil-repeat behavior tests
+(ert-deftest evil-quickscope-find-char-repeat-test ()
+  "Test find-char* with evil-repeat. Shouldn't affect the repeats."
+  :tags '(evil-quickscope)
+
+  ;; "*abc def ghi" with "ijkl <esc>fg0." should leave "jkl* jkl abc def ghi"
+  (evil-quickscope-test-macro
+   "abc def ghi" 1 [?i ?j ?k ?l ?\s escape ?f ?g ?0 ?\.]
+   (evil-quickscope-should-str-pos-vis "jkl jkl abc def ghi" 4 nil))
+
+  ;; "*abc def ghi" with "ijkl <esc>tg0." should leave "jkl* jkl abc def ghi"
+  (evil-quickscope-test-macro
+   "abc def ghi" 1 [?i ?j ?k ?l ?\s escape ?t ?g ?0 ?\.]
+   (evil-quickscope-should-str-pos-vis "jkl jkl abc def ghi" 4 nil))
+
+  ;; "*abc def ghi" with "ijkl <esc>Fk0." should leave "jkl* jkl abc def ghi"
+  (evil-quickscope-test-macro
+   "abc def ghi" 1 [?i ?j ?k ?l ?\s escape ?F ?k ?0 ?\.]
+   (evil-quickscope-should-str-pos-vis "jkl jkl abc def ghi" 4 nil))
+
+  ;; "*abc def ghi" with "ijkl <esc>Tk0." should leave "jkl* jkl abc def ghi"
+  (evil-quickscope-test-macro
+   "abc def ghi" 1 [?i ?j ?k ?l ?\s escape ?T ?k ?0 ?\.]
+   (evil-quickscope-should-str-pos-vis "jkl jkl abc def ghi" 4 nil))
+  )
+
 ;;; Minor-mode tests
 (ert-deftest evil-quickscope-minor-mode-on-test ()
   "Test evil-quickscope-mode turning on."
