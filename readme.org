@@ -1,4 +1,4 @@
-* evil-quickscope (v0.1.2)
+* evil-quickscope (v0.1.3)
 This package emulates [[https://github.com/unblevable/quick-scope][quick_scope.vim by Brian Le]]. It highlights targets for
 evil-mode's f,F,t,T keys, allowing for quick navigation within a line with no
 additional mappings.

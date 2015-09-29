@@ -5,7 +5,7 @@
 ;; Author: Michael Chen <blorbx@gmail.com>
 ;; Maintainer: Michael Chen <blorbx@gmail.com>
 ;; Created: 12 Aug 2015
-;; Version: 0.1.2
+;; Version: 0.1.3
 
 ;; Homepage: http://github.com/blorbx/evil-quickscope
 ;; Keywords: faces, emulation, vim, evil
