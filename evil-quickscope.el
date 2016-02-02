@@ -1,11 +1,11 @@
 ;;; evil-quickscope.el --- Highlight unique characters in words for f,F,t,T navigation
 
-;; Copyright (C) 2015 Michael Chen
+;; Copyright (C) 2016 Michael Chen
 
 ;; Author: Michael Chen <blorbx@gmail.com>
 ;; Maintainer: Michael Chen <blorbx@gmail.com>
 ;; Created: 12 Aug 2015
-;; Version: 0.1.3
+;; Version: 0.1.4
 
 ;; Homepage: http://github.com/blorbx/evil-quickscope
 ;; Keywords: faces, emulation, vim, evil
@@ -87,6 +87,10 @@
 (defcustom evil-quickscope-cross-lines nil
   "Whether to cross lines for targets.
 Use in conjunction with the evil-cross-lines variable."
+  :group 'evil-quickscope)
+
+(defcustom evil-quickscope-disable-in-comments nil
+  "If enabled (t), disables quickscope-always-mode overlays when in a comment."
   :group 'evil-quickscope)
 
 (defcustom evil-quickscope-accepted-chars
@@ -232,8 +236,10 @@ updating when holding a key to scroll. Set to 0 to disable."
 (defun evil-quickscope-update-overlays-bidirectional ()
   "Update overlays in both directions from point."
   (evil-quickscope-remove-overlays)
-  (evil-quickscope-apply-overlays-forward)
-  (evil-quickscope-apply-overlays-backward))
+  (unless (and evil-quickscope-disable-in-comments
+               (nth 4 (syntax-ppss)))
+    (evil-quickscope-apply-overlays-forward)
+    (evil-quickscope-apply-overlays-backward)))
 
 (defun evil-quickscope-update-overlays-directional (is-forward)
   "Update overlay forward from point. If arg is nil, update backward."
